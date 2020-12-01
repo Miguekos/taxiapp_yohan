@@ -27,7 +27,9 @@ services:
     links:
       - mysql
       - redis
-    ports:
+    # ports:
+    #   - "80:8080"
+    expose:
       - "80:8080"
     environment:
       - VIRTUAL_HOST=ezride.apps.com.pe,www.ezride.apps.com.pe
