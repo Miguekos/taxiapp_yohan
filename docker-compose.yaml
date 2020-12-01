@@ -27,8 +27,8 @@ services:
     links:
       - mysql
       - redis
-    # ports:
-    #   - "80:8080"
+    ports:
+      - "8080:8080"
     expose:
       - "80:8080"
     environment:
