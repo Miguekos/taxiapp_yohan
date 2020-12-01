@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysqlvol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: defaultpassword
+
+  redis:
+    image: redis
+    volumes:
+      - redisvol:/data
+
+  taxi:
+    image: ridyio/taxi
+    restart: always
+    depends_on:
+      - "redis"
+      - "mysql"
+    volumes:
+      - ./img:/app/public/img
+      - ./config:/app/config
+      - taxiassets:/app/public/assets
+    links:
+      - mysql
+      - redis
+    ports:
+      - "80:8080"
+    environment:
+      - VIRTUAL_HOST=ezride.apps.com.pe,www.ezride.apps.com.pe
+      - LETSENCRYPT_HOST=ezride.apps.com.pe,www.ezride.apps.com.pe
+      - LETSENCRYPT_EMAIL=miguekos1233@gmail.com
+
+volumes:
+  redisvol:
+  mysqlvol:
+  taxiassets:
+
+networks:
+  default:
+    external:
+      name: nginx-proxy_default
